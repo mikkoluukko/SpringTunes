@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/css/main.css}">
+<script th:src="@{/js/bootstrap.min.js}" ></script>
+<head>
+    <meta charset="UTF-8">
+    <title>SpringTunes</title>
+</head>
+<body>
+
+<div class="container inner-padded">
+    <div class="row justify-content-center align-items-center" style="padding-bottom: 2em;">
+        <h1 class="display-3">SpringTunes</h1>
+    </div>
+    <div class="row justify-content-md-center py-2">
+        <div class="input-group col-md-4">
+            <input class="form-control py-2" type="search" value="search" id="example-search-input">
+            <span class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button">
+                <i class="fa fa-search"></i>
+            </button>
+          </span>
+        </div>
+    </div>
+    <div class="row py-2">
+        <div class="col-md-4">
+            <h2>Five random artists</h2>
+                <ul class="list-group">
+                    <li class="list-group-item" th:each="artist:${artists}" th:text="${artist.getName()}"></li>
+                </ul>
+        </div>
+        <div class="col-md-4">
+            <h2>Five random songs</h2>
+            <ul class="list-group">
+                <li class="list-group-item" th:each="artist:${artists}" th:text="${artist.getName()}"></li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <h2>Five random genres</h2>
+            <ul class="list-group">
+                <li class="list-group-item" th:each="artist:${artists}" th:text="${artist.getName()}"></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
