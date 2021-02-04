@@ -9,6 +9,10 @@ public class Genre {
         this.name = name;
     }
 
+    public Genre() {
+
+    }
+
     public String getGenreId() {
         return genreId;
     }

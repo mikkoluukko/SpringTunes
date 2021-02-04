@@ -14,69 +14,40 @@ public class CustomerController {
 
     CustomerRepository customerRepository = new CustomerRepository();
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index(){
-        return "index";
-    }
-
     @RequestMapping(value = "/customers", method = RequestMethod.GET)
     public List<Customer> getAllCustomers() {
         List<Customer> allCustomers = customerRepository.getAllCustomers();
         return allCustomers;
     }
 
-//    @RequestMapping(value = "/customers/{id}")
-//    public String getSpecificCustomer(@PathVariable String id, Model model){
-//        model.addAttribute("customer", crep.getSpecificCustomer(id));
-//        return "view-customer";
-//    }
-//
-//    @RequestMapping(value = "/add-customers", method = RequestMethod.GET)
-//    public String addCustomer(Model model){
-//        model.addAttribute("customer", new Customer());
-//        return "add-customers";
-//    }
-//
     @RequestMapping(value = "/customers/new", method = RequestMethod.POST)
-    public String addCustomer(@RequestBody Customer customer, BindingResult error) {
-        Boolean success = customerRepository.addCustomer(customer);
-        return customer.getFirstName();
+    public Customer addCustomer(@RequestBody Customer customer, BindingResult error) {
+        customerRepository.addCustomer(customer);
+        return customer;
     }
 
     @RequestMapping(value = "/customers/{id}", method = RequestMethod.PUT)
-    public String updateSpecificCustomer(@PathVariable String id, @RequestBody Customer customer) {
+    public Customer updateSpecificCustomer(@PathVariable String id, @RequestBody Customer customer) {
         customer.setCustomerId(id);
-        Boolean success = customerRepository.updateCustomer(customer);
-        return customer.getFirstName();
+        customerRepository.updateCustomer(customer);
+        return customer;
     }
 
     @RequestMapping(value = "/customers/per-country", method = RequestMethod.GET)
-    public List<String> getCustomersPerCountry() {
-        List<String> customersPerCountry = customerRepository.getCustomersPerCountry();
-        return customersPerCountry;
-    }
-
-    @RequestMapping(value = "/customers/per-country2", method = RequestMethod.GET)
-    public List<Country> getCustomersPerCountry2() {
-        List<Country> customersPerCountry = customerRepository.getCustomersPerCountry2();
+    public List<Country> getCustomersPerCountry() {
+        List<Country> customersPerCountry = customerRepository.getCustomersPerCountry();
         return customersPerCountry;
     }
 
     @RequestMapping(value = "/customers/by-invoice-total", method = RequestMethod.GET)
-    public List<Customer> getCustomersByInvoiceTotal() {
-        List<Customer> customersByInvoiceTotal = customerRepository.getCustomersByInvoiceTotal();
+    public List<String> getCustomersByInvoiceTotal() {
+        List<String> customersByInvoiceTotal = customerRepository.getCustomersByInvoiceTotal();
         return customersByInvoiceTotal;
     }
 
-    @RequestMapping(value = "/customers/by-invoice-total2", method = RequestMethod.GET)
-    public List<String> getCustomersByInvoiceTotal2() {
-        List<String> customersByInvoiceTotal = customerRepository.getCustomersByInvoiceTotal2();
-        return customersByInvoiceTotal;
-    }
-
-    @RequestMapping(value = "/customers/{id}/most-popular-genre", method = RequestMethod.GET)
-    public String getMostPopularGenreForUser(@PathVariable String id) {
-        String mostPopularGenre = customerRepository.getMostPopularGenreForUser(id);
+    @RequestMapping(value = "/customers/{id}/popular/genre", method = RequestMethod.GET)
+    public List<String> getMostPopularGenreForUser(@PathVariable String id) {
+        List<String> mostPopularGenre = customerRepository.getMostPopularGenreForUser(id);
         return mostPopularGenre;
     }
 }

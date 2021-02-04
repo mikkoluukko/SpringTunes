@@ -8,13 +8,12 @@
     <title>Search results</title>
 </head>
 <body>
-
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="/"><img style="width: 35px" th:src="@{/img/thymeleaf.png}" alt=""></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
@@ -24,21 +23,21 @@
     </div>
 </nav>
 <div class="container inner-padded">
-    <table th:if="${track != null}">
+    <table class="table-bordered" th:if="${track != null}">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Artist</th>
-            <th>Album</th>
-            <th>Genre</th>
+            <th class="p-1">Name</th>
+            <th class="p-1">Artist</th>
+            <th class="p-1">Album</th>
+            <th class="p-1">Genre</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td th:text="${track.getName()}"></td>
-            <td th:text="${track.getArtistName()}"></td>
-            <td th:text="${track.getAlbumName()}"></td>
-            <td th:text="${track.getGenreName()}"></td>
+            <td class="py-1 px-2" th:text="${track.getName()}"></td>
+            <td class="py-1 px-2" th:text="${track.getArtistName()}"></td>
+            <td class="py-1 px-2" th:text="${track.getAlbumName()}"></td>
+            <td class="py-1 px-2" th:text="${track.getGenreName()}"></td>
         </tr>
         </tbody>
     </table>

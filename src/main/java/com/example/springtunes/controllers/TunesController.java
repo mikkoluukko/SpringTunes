@@ -30,18 +30,10 @@ public class TunesController {
         return "index";
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @RequestMapping(value = "/searchresults", method = RequestMethod.POST)
     public String getSearchResults(@ModelAttribute Track track, BindingResult error, Model model) {
         Track newTrack = tunesRepository.getTrackByName(track.getName());
-
         model.addAttribute("track", newTrack);
-//        if(success){model.addAttribute("customer", new Track());}
-
-        return "searchResults";
-    }
-
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String getSearchResults(Model model) {
         return "searchResults";
     }
 }
