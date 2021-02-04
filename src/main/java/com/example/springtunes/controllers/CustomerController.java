@@ -1,6 +1,7 @@
 package com.example.springtunes.controllers;
 
 import com.example.springtunes.data_access.CustomerRepository;
+import com.example.springtunes.models.Country;
 import com.example.springtunes.models.Customer;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -55,9 +56,21 @@ public class CustomerController {
         return customersPerCountry;
     }
 
+    @RequestMapping(value = "/customers/per-country2", method = RequestMethod.GET)
+    public List<Country> getCustomersPerCountry2() {
+        List<Country> customersPerCountry = customerRepository.getCustomersPerCountry2();
+        return customersPerCountry;
+    }
+
     @RequestMapping(value = "/customers/by-invoice-total", method = RequestMethod.GET)
-    public List<String> getCustomersByInvoiceTotal() {
-        List<String> customersByInvoiceTotal = customerRepository.getCustomersByInvoiceTotal();
+    public List<Customer> getCustomersByInvoiceTotal() {
+        List<Customer> customersByInvoiceTotal = customerRepository.getCustomersByInvoiceTotal();
+        return customersByInvoiceTotal;
+    }
+
+    @RequestMapping(value = "/customers/by-invoice-total2", method = RequestMethod.GET)
+    public List<String> getCustomersByInvoiceTotal2() {
+        List<String> customersByInvoiceTotal = customerRepository.getCustomersByInvoiceTotal2();
         return customersByInvoiceTotal;
     }
 

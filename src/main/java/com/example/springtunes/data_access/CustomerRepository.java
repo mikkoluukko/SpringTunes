@@ -1,5 +1,6 @@
 package com.example.springtunes.data_access;
 
+import com.example.springtunes.models.Country;
 import com.example.springtunes.models.Customer;
 
 import java.sql.Connection;
@@ -172,8 +173,8 @@ public class CustomerRepository {
             ResultSet set = prep.executeQuery();
             while(set.next()){
                 customersPerCountry.add( new String(
-                        set.getString("Country") + ": " +
-                                set.getString("CustomerCount")
+                        set.getString("Country") +": " +
+                        set.getString("CustomerCount")
                 ));
             }
             System.out.println("Get all went well!");
@@ -192,7 +193,77 @@ public class CustomerRepository {
         return customersPerCountry;
     }
 
-    public ArrayList<String> getCustomersByInvoiceTotal(){
+    public ArrayList<Country> getCustomersPerCountry2(){
+        ArrayList<Country> customersPerCountry = new ArrayList<>();
+        // ---
+        try{
+            // connect
+            conn = DriverManager.getConnection(URL);
+            PreparedStatement prep =
+                    conn.prepareStatement("SELECT Country, COUNT(*) AS CustomerCount FROM " +
+                            "customer GROUP BY Country ORDER BY COUNT(*) DESC");
+            ResultSet set = prep.executeQuery();
+            while(set.next()){
+                customersPerCountry.add( new Country(
+                    set.getString("Country"),
+                    set.getString("CustomerCount")
+                ));
+            }
+            System.out.println("Get all went well!");
+
+        }catch(Exception exception){
+            System.out.println(exception.toString());
+        }
+        finally {
+            try{
+                conn.close();
+            } catch (Exception exception){
+                System.out.println(exception.toString());
+            }
+        }
+        // ---
+        return customersPerCountry;
+    }
+
+    public ArrayList<Customer> getCustomersByInvoiceTotal(){
+        ArrayList<Customer> customersByInvoiceTotal = new ArrayList<>();
+        // ---
+        try{
+            // connect
+            conn = DriverManager.getConnection(URL);
+            PreparedStatement prep =
+                    conn.prepareStatement("SELECT Customer.CustomerId AS CustomerId, FirstName, LastName, " +
+                            "Country, PostalCode, Phone, Email,  SUM(Total) AS TotalSum FROM " +
+                            "invoice JOIN Customer ON Invoice.CustomerId = Customer.CustomerId GROUP BY Invoice.CustomerId ORDER BY TotalSum DESC");
+            ResultSet set = prep.executeQuery();
+            while(set.next()){
+                customersByInvoiceTotal.add( new Customer(
+                        set.getString("CustomerId"),
+                        set.getString("FirstName"),
+                        set.getString("LastName"),
+                        set.getString("Country"),
+                        set.getString("PostalCode"),
+                        set.getString("Phone"),
+                        set.getString("Email")
+                ));
+            }
+            System.out.println("Get all went well!");
+
+        }catch(Exception exception){
+            System.out.println(exception.toString());
+        }
+        finally {
+            try{
+                conn.close();
+            } catch (Exception exception){
+                System.out.println(exception.toString());
+            }
+        }
+        // ---
+        return customersByInvoiceTotal;
+    }
+
+    public ArrayList<String> getCustomersByInvoiceTotal2(){
         ArrayList<String> customersByInvoiceTotal = new ArrayList<>();
         // ---
         try{
