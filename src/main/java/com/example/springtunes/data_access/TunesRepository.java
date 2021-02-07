@@ -13,14 +13,23 @@ import java.util.List;
 import java.util.Random;
 
 public class TunesRepository {
-    private String URL = "jdbc:sqlite::resource:Chinook_Sqlite.sqlite";
+    private final String URL = "jdbc:sqlite::resource:Chinook_Sqlite.sqlite";
     private Connection conn = null;
 
+    // Used to populate the list of five random objects of any type (Artist, Track, Genre)
     private <T> void getFiveRandom(List<T> all, List<T> five) {
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
             int randomIndex = random.nextInt(all.size());
             five.add(all.get(randomIndex));
+        }
+    }
+
+    private void closeConnection() {
+        try {
+            conn.close();
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
         }
     }
 
@@ -43,11 +52,7 @@ public class TunesRepository {
             System.out.println(exception.toString());
         }
         finally {
-            try {
-                conn.close();
-            } catch (Exception exception) {
-                System.out.println(exception.toString());
-            }
+            closeConnection();
         }
         return artists;
     }
@@ -58,7 +63,6 @@ public class TunesRepository {
         getFiveRandom(allArtists, fiveRandomArtists);
         return fiveRandomArtists;
     }
-
 
     public List<Track> getAllTracks(){
         List<Track> tracks = new ArrayList<>();
@@ -81,11 +85,7 @@ public class TunesRepository {
             System.out.println(exception.toString());
         }
         finally {
-            try {
-                conn.close();
-            } catch (Exception exception) {
-                System.out.println(exception.toString());
-            }
+            closeConnection();
         }
         return tracks;
     }
@@ -104,9 +104,10 @@ public class TunesRepository {
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
                     conn.prepareStatement("SELECT TrackId, T.Name AS Name, Artist.Name AS Artist, " +
-                            "Album.Title AS Album, G.Name AS GenreName FROM Genre G Join Track T " +
-                            "ON G.GenreId = T.GenreId JOIN Album ON T.AlbumId = Album.AlbumId JOIN " +
-                            "Artist ON Album.ArtistId = Artist.ArtistId WHERE UPPER(T.Name)=?");
+                            "Album.Title AS Album, G.Name AS GenreName FROM Genre G " +
+                            "JOIN Track T ON G.GenreId = T.GenreId " +
+                            "JOIN Album ON T.AlbumId = Album.AlbumId " +
+                            "JOIN Artist ON Album.ArtistId = Artist.ArtistId WHERE UPPER(T.Name)=?");
             prep.setString(1, name);
             ResultSet set = prep.executeQuery();
             while (set.next()) {
@@ -123,15 +124,10 @@ public class TunesRepository {
             System.out.println(exception.toString());
         }
         finally {
-            try {
-                conn.close();
-            } catch (Exception exception){
-                System.out.println(exception.toString());
-            }
+            closeConnection();
         }
         return track;
     }
-
 
     public List<Genre> getAllGenres(){
         List<Genre> genres = new ArrayList<>();
@@ -152,11 +148,7 @@ public class TunesRepository {
             System.out.println(exception.toString());
         }
         finally {
-            try {
-                conn.close();
-            } catch (Exception exception) {
-                System.out.println(exception.toString());
-            }
+            closeConnection();
         }
         return genres;
     }

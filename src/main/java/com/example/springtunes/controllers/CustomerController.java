@@ -3,7 +3,8 @@ package com.example.springtunes.controllers;
 import com.example.springtunes.data_access.CustomerRepository;
 import com.example.springtunes.models.Country;
 import com.example.springtunes.models.Customer;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,38 +17,41 @@ public class CustomerController {
 
     @RequestMapping(value = "/customers", method = RequestMethod.GET)
     public List<Customer> getAllCustomers() {
-        List<Customer> allCustomers = customerRepository.getAllCustomers();
-        return allCustomers;
+        return customerRepository.getAllCustomers();
     }
 
     @RequestMapping(value = "/customers/new", method = RequestMethod.POST)
-    public Customer addCustomer(@RequestBody Customer customer, BindingResult error) {
-        customerRepository.addCustomer(customer);
-        return customer;
+    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
+        if (customerRepository.addCustomer(customer)) {
+            Customer addedCustomer = customerRepository.getSpecificCustomer(customer.getCustomerId());
+            return new ResponseEntity<>(addedCustomer, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(customer, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "/customers/{id}", method = RequestMethod.PUT)
-    public Customer updateSpecificCustomer(@PathVariable String id, @RequestBody Customer customer) {
-        customer.setCustomerId(id);
-        customerRepository.updateCustomer(customer);
-        return customer;
+    public ResponseEntity<Customer> updateSpecificCustomer(@PathVariable String id, @RequestBody Customer customer) {
+        if (customerRepository.updateCustomer(id, customer)) {
+            Customer updatedCustomer = customerRepository.getSpecificCustomer(id);
+            return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(customer, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "/customers/per-country", method = RequestMethod.GET)
     public List<Country> getCustomersPerCountry() {
-        List<Country> customersPerCountry = customerRepository.getCustomersPerCountry();
-        return customersPerCountry;
+        return customerRepository.getCustomersPerCountry();
     }
 
     @RequestMapping(value = "/customers/by-invoice-total", method = RequestMethod.GET)
     public List<String> getCustomersByInvoiceTotal() {
-        List<String> customersByInvoiceTotal = customerRepository.getCustomersByInvoiceTotal();
-        return customersByInvoiceTotal;
+        return customerRepository.getCustomersByInvoiceTotal();
     }
 
     @RequestMapping(value = "/customers/{id}/popular/genre", method = RequestMethod.GET)
     public List<String> getMostPopularGenreForUser(@PathVariable String id) {
-        List<String> mostPopularGenre = customerRepository.getMostPopularGenreForUser(id);
-        return mostPopularGenre;
+        return customerRepository.getMostPopularGenreForUser(id);
     }
 }

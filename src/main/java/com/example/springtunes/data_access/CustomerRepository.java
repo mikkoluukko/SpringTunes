@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerRepository {
-    private String URL = "jdbc:sqlite::resource:Chinook_Sqlite.sqlite";
+    private final String URL = "jdbc:sqlite::resource:Chinook_Sqlite.sqlite";
     private Connection conn = null;
 
     private Customer createCustomer(ResultSet set) throws SQLException {
@@ -23,7 +23,7 @@ public class CustomerRepository {
         );
     }
 
-    public ArrayList<Customer> getAllCustomers(){
+    public ArrayList<Customer> getAllCustomers() {
         ArrayList<Customer> customers = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(URL);
@@ -48,8 +48,35 @@ public class CustomerRepository {
         return customers;
     }
 
-    public Boolean addCustomer(Customer customer){
-        Boolean success = false;
+    public Customer getSpecificCustomer(String id) {
+        Customer customer = null;
+        try {
+            conn = DriverManager.getConnection(URL);
+            PreparedStatement prep =
+                    conn.prepareStatement("SELECT CustomerId, FirstName, LastName, " +
+                            "Country, PostalCode, Phone, Email FROM customer WHERE CustomerId=?");
+            prep.setString(1, id);
+            ResultSet set = prep.executeQuery();
+            while (set.next()) {
+                customer = createCustomer(set);
+            }
+            System.out.println("Get specific went well!");
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
+        finally {
+            try{
+                conn.close();
+            } catch (Exception exception) {
+                System.out.println(exception.toString());
+            }
+        }
+        return customer;
+    }
+
+
+    public boolean addCustomer(Customer customer) {
+        boolean isSuccess = false;
         try {
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
@@ -64,7 +91,7 @@ public class CustomerRepository {
             prep.setString(7, customer.getEmail());
 
             int result = prep.executeUpdate();
-            success = (result != 0); // if res = 1; true
+            isSuccess = (result != 0); // if res = 1; true
 
             System.out.println("Add went well!");
         } catch(Exception exception) {
@@ -75,29 +102,29 @@ public class CustomerRepository {
                 conn.close();
             } catch (Exception exception) {
                 System.out.println(exception.toString());
+
             }
         }
-        return success;
+        return isSuccess;
     }
 
-    public Boolean updateCustomer(Customer customer){
-        Boolean success = false;
+    public boolean updateCustomer(String id, Customer customer) {
+        boolean isSuccess = false;
         try {
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
-                    conn.prepareStatement("UPDATE customer SET CustomerId=?, FirstName=?, LastName=?, " +
+                    conn.prepareStatement("UPDATE customer SET FirstName=?, LastName=?, " +
                             "Country=?, PostalCode=?, Phone=?, Email=? WHERE CustomerId=?");
-            prep.setString(1, customer.getCustomerId());
-            prep.setString(2, customer.getFirstName());
-            prep.setString(3, customer.getLastName());
-            prep.setString(4, customer.getCountry());
-            prep.setString(5, customer.getPostalCode());
-            prep.setString(6, customer.getPhone());
-            prep.setString(7, customer.getEmail());
-            prep.setString(8, customer.getCustomerId());
+            prep.setString(1, customer.getFirstName());
+            prep.setString(2, customer.getLastName());
+            prep.setString(3, customer.getCountry());
+            prep.setString(4, customer.getPostalCode());
+            prep.setString(5, customer.getPhone());
+            prep.setString(6, customer.getEmail());
+            prep.setString(7, id);
 
             int result = prep.executeUpdate();
-            success = (result != 0); // if res = 1; true
+            isSuccess = (result != 0); // if res = 1; true
 
             System.out.println("Update went well!");
         } catch (Exception exception) {
@@ -110,7 +137,7 @@ public class CustomerRepository {
                 System.out.println(exception.toString());
             }
         }
-        return success;
+        return isSuccess;
     }
 
     public ArrayList<Country> getCustomersPerCountry(){
@@ -118,8 +145,8 @@ public class CustomerRepository {
         try{
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
-                    conn.prepareStatement("SELECT Country, COUNT(*) AS CustomerCount FROM " +
-                            "customer GROUP BY Country ORDER BY COUNT(*) DESC");
+                    conn.prepareStatement("SELECT Country, COUNT(*) AS CustomerCount " +
+                            "FROM Customer GROUP BY Country ORDER BY COUNT(*) DESC");
             ResultSet set = prep.executeQuery();
             while(set.next()){
                 customersPerCountry.add( new Country(
@@ -146,13 +173,13 @@ public class CustomerRepository {
         try {
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
-                    conn.prepareStatement("SELECT FirstName, LastName, SUM(Total) AS TotalSum FROM " +
-                            "invoice JOIN Customer ON Invoice.CustomerId = Customer.CustomerId GROUP BY " +
-                            "Invoice.CustomerId ORDER BY TotalSum DESC");
+                    conn.prepareStatement("SELECT FirstName, LastName, SUM(Total) AS TotalSum " +
+                            "FROM Invoice JOIN Customer ON Invoice.CustomerId = Customer.CustomerId " +
+                            "GROUP BY Invoice.CustomerId ORDER BY TotalSum DESC");
             ResultSet set = prep.executeQuery();
             while (set.next()) {
-                customersByInvoiceTotal.add(new String(set.getString("FirstName") + " " +
-                        set.getString("LastName") + ": " + set.getString("TotalSum")));
+                customersByInvoiceTotal.add(set.getString("FirstName") + " " +
+                        set.getString("LastName") + ": " + set.getString("TotalSum"));
             }
             System.out.println("Get all went well!");
         } catch (Exception exception) {
@@ -174,16 +201,20 @@ public class CustomerRepository {
         try {
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
-                    conn.prepareStatement("WITH CountQuery AS (SELECT G.Name AS Name, COUNT(T.GenreId) AS " +
-                            "GenreCount FROM Genre G JOIN Track T ON G.GenreId = T.GenreId JOIN InvoiceLine IL ON " +
-                            "T.TrackId = IL.TrackId JOIN Invoice I ON IL.InvoiceId = I.InvoiceId JOIN Customer C ON " +
-                            "I.CustomerId = C.CustomerId WHERE C.CustomerId = ? GROUP BY T.GenreId) SELECT Name, " +
-                            "GenreCount FROM CountQuery WHERE (SELECT MAX(GenreCount) FROM CountQuery) = GenreCount");
+                    conn.prepareStatement("WITH CountQuery AS (" +
+                            "SELECT G.Name AS Name, COUNT(T.GenreId) AS GenreCount " +
+                            "FROM Genre G JOIN Track T ON G.GenreId = T.GenreId  " +
+                            "JOIN InvoiceLine IL ON T.TrackId = IL.TrackId " +
+                            "JOIN Invoice I ON IL.InvoiceId = I.InvoiceId " +
+                            "JOIN Customer C ON I.CustomerId = C.CustomerId " +
+                            "WHERE C.CustomerId = ? GROUP BY T.GenreId) " +
+                            "SELECT Name, GenreCount FROM CountQuery " +
+                            "WHERE (SELECT MAX(GenreCount) FROM CountQuery) = GenreCount");
             prep.setString(1, id);
             ResultSet set = prep.executeQuery();
             while (set.next()) {
-                mostPopularGenre.add(new String("Genre most listened to: " + set.getString("Name") +
-                        ", times listened to: " + set.getString("GenreCount")));
+                mostPopularGenre.add("Genre most listened to: " + set.getString("Name") +
+                        ", times listened to: " + set.getString("GenreCount"));
             }
             System.out.println("Get all went well!");
         } catch (Exception exception) {

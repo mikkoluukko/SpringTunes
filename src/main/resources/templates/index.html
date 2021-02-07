@@ -27,7 +27,7 @@
         <h1 class="display-3">SpringTunes</h1>
     </div>
     <div class="row justify-content-md-center py-2">
-        <form action="#" th:action="@{/search}" th:object="${searchTrack}" method="post">
+        <form action="#" th:action="@{/search-results}" th:object="${searchTrack}" method="post">
             <div class="input-group">
                 <input type="text" class="form-control" id="song" th:field="*{name}"
                        placeholder="Search a song by name" required />

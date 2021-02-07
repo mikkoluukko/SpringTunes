@@ -6,7 +6,6 @@ import com.example.springtunes.models.Genre;
 import com.example.springtunes.models.Track;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,8 +29,8 @@ public class TunesController {
         return "index";
     }
 
-    @RequestMapping(value = "/searchresults", method = RequestMethod.POST)
-    public String getSearchResults(@ModelAttribute Track track, BindingResult error, Model model) {
+    @RequestMapping(value = "/search-results", method = RequestMethod.POST)
+    public String getSearchResults(@ModelAttribute Track track, Model model) {
         Track newTrack = tunesRepository.getTrackByName(track.getName());
         model.addAttribute("track", newTrack);
         return "searchResults";
