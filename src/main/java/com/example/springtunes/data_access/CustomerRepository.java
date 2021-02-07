@@ -23,13 +23,21 @@ public class CustomerRepository {
         );
     }
 
+    private void closeConnection() {
+        try {
+            conn.close();
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
+    }
+
     public ArrayList<Customer> getAllCustomers() {
         ArrayList<Customer> customers = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
                     conn.prepareStatement("SELECT CustomerId, FirstName, LastName, " +
-                            "Country, PostalCode, Phone, Email FROM customer");
+                            "Country, PostalCode, Phone, Email FROM Customer");
             ResultSet set = prep.executeQuery();
             while (set.next()) {
                 customers.add(createCustomer(set));
@@ -39,48 +47,17 @@ public class CustomerRepository {
             System.out.println(exception.toString());
         }
         finally {
-            try {
-                conn.close();
-            } catch (Exception exception) {
-                System.out.println(exception.toString());
-            }
+            closeConnection();
         }
         return customers;
     }
-
-    public Customer getSpecificCustomer(String id) {
-        Customer customer = null;
-        try {
-            conn = DriverManager.getConnection(URL);
-            PreparedStatement prep =
-                    conn.prepareStatement("SELECT CustomerId, FirstName, LastName, " +
-                            "Country, PostalCode, Phone, Email FROM customer WHERE CustomerId=?");
-            prep.setString(1, id);
-            ResultSet set = prep.executeQuery();
-            while (set.next()) {
-                customer = createCustomer(set);
-            }
-            System.out.println("Get specific went well!");
-        } catch (Exception exception) {
-            System.out.println(exception.toString());
-        }
-        finally {
-            try{
-                conn.close();
-            } catch (Exception exception) {
-                System.out.println(exception.toString());
-            }
-        }
-        return customer;
-    }
-
 
     public boolean addCustomer(Customer customer) {
         boolean isSuccess = false;
         try {
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
-                    conn.prepareStatement("INSERT INTO customer(CustomerId, FirstName, LastName," +
+                    conn.prepareStatement("INSERT INTO Customer(CustomerId, FirstName, LastName," +
                             "Country, PostalCode, Phone, Email) VALUES(?,?,?,?,?,?,?)");
             prep.setString(1, customer.getCustomerId());
             prep.setString(2, customer.getFirstName());
@@ -98,14 +75,56 @@ public class CustomerRepository {
             System.out.println(exception.toString());
         }
         finally {
-            try {
-                conn.close();
-            } catch (Exception exception) {
-                System.out.println(exception.toString());
-
-            }
+            closeConnection();
         }
         return isSuccess;
+    }
+
+    public Customer getSpecificCustomer(String id) {
+        Customer customer = null;
+        if (id == null) {
+            id = getLastId();
+        }
+        try {
+            conn = DriverManager.getConnection(URL);
+            PreparedStatement prep =
+                    conn.prepareStatement("SELECT CustomerId, FirstName, LastName, " +
+                            "Country, PostalCode, Phone, Email FROM Customer WHERE CustomerId=?");
+            prep.setString(1, id);
+            ResultSet set = prep.executeQuery();
+            while (set.next()) {
+                customer = createCustomer(set);
+            }
+            System.out.println("Get specific went well!");
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
+        finally {
+            closeConnection();
+        }
+        return customer;
+    }
+
+    // This method is used for a situation where a new customer is added without specifying the customerId.
+    private String getLastId() {
+        String lastId = null;
+        try {
+            conn = DriverManager.getConnection(URL);
+            PreparedStatement prep =
+                    conn.prepareStatement("SELECT CustomerId FROM Customer " +
+                            "ORDER BY CustomerId DESC LIMIT 1");
+            ResultSet set = prep.executeQuery();
+            while (set.next()) {
+                lastId = set.getString("CustomerId");
+            }
+            System.out.println("Get all went well!");
+        } catch (Exception exception) {
+            System.out.println(exception.toString());
+        }
+        finally {
+            closeConnection();
+        }
+        return lastId;
     }
 
     public boolean updateCustomer(String id, Customer customer) {
@@ -113,7 +132,7 @@ public class CustomerRepository {
         try {
             conn = DriverManager.getConnection(URL);
             PreparedStatement prep =
-                    conn.prepareStatement("UPDATE customer SET FirstName=?, LastName=?, " +
+                    conn.prepareStatement("UPDATE Customer SET FirstName=?, LastName=?, " +
                             "Country=?, PostalCode=?, Phone=?, Email=? WHERE CustomerId=?");
             prep.setString(1, customer.getFirstName());
             prep.setString(2, customer.getLastName());
@@ -131,11 +150,7 @@ public class CustomerRepository {
             System.out.println(exception.toString());
         }
         finally {
-            try {
-                conn.close();
-            } catch (Exception exception) {
-                System.out.println(exception.toString());
-            }
+            closeConnection();
         }
         return isSuccess;
     }
@@ -159,11 +174,7 @@ public class CustomerRepository {
             System.out.println(exception.toString());
         }
         finally {
-            try {
-                conn.close();
-            } catch (Exception exception) {
-                System.out.println(exception.toString());
-            }
+            closeConnection();
         }
         return customersPerCountry;
     }
@@ -186,11 +197,7 @@ public class CustomerRepository {
             System.out.println(exception.toString());
         }
         finally {
-            try {
-                conn.close();
-            } catch (Exception exception) {
-                System.out.println(exception.toString());
-            }
+            closeConnection();
         }
         return customersByInvoiceTotal;
     }
@@ -221,11 +228,7 @@ public class CustomerRepository {
             System.out.println(exception.toString());
         }
         finally {
-            try {
-                conn.close();
-            } catch (Exception exception) {
-                System.out.println(exception.toString());
-            }
+            closeConnection();
         }
         return mostPopularGenre;
     }
