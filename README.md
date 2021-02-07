@@ -1,5 +1,5 @@
 # Task 4: Fake Itunes
-##About
+## About
 The goal of this program is to demonstrate:
 - Configuring REST endpoints with Spring.
 - Using Thymeleaf to create template html pages with templated data.
@@ -9,19 +9,19 @@ The goal of this program is to demonstrate:
 
 The program uses a SQLite sample database called Chinook Database ([link to GitHub](https://github.com/lerocha/chinook-database)).
 
-##Description
+## Description
 The project uses Spring Boot and Spring Initializr to create a web application.
 The web application uses Thymeleaf as a templating engine.
 The application also offers a separate REST API.
 
-###Thymeleaf views
+### Thymeleaf views
 The application has two different Thymeleaf views.
 1. The home page shows 5 random artists, 5 random songs and 5 random genres from the database.
 The home page also contains a search bar which can be used to search for any song in the database.
 2. The search results page shows the results for the search query that the user has made.
 The result row includes the track name, artist, album and genre. The search is case insensitive.
    
-###API endpoints
+### API endpoints
 The API endpoints are accessed from /api/customers/ and cater to the following functionality:
 - A GET request to /api/customers/ returns a list of all the customers in the database,
 displaying their id, first name, last name, country, postal code, phone number and email.
@@ -38,7 +38,7 @@ Each entry includes the full name of the customer and their total invoice value.
 - A GET request to /api/customers/id/popular/genre (with id being the actual customerId number of the specific customer) returns the specific customers most listened to genre(s).
 In most cases the response will only include one genre but in case of a tie, all the genres that have the highest listened-to-count will be displayed.
 
-##Publishing
+## Publishing
 Finished application hosted on Heroku: [Spring Tunes](https://spring-tunes.herokuapp.com)
 
 
