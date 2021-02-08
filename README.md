@@ -42,6 +42,8 @@ In most cases the response will only include one genre but in case of a tie, all
 ## Demonstration
 Finished application hosted on Heroku: [Spring Tunes](https://spring-tunes.herokuapp.com)
 
+Docker container hosted on DockerHub: [Spring Tunes](https://hub.docker.com/repository/docker/mikkoluukko/springtunes)
+
 A Postman Collection demonstrating calls to all the API endpoints is in the file `Customers API endpoints.postman_collection.json` in the root directory of the project.
 
 
