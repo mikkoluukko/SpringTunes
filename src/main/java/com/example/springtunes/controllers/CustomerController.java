@@ -20,6 +20,8 @@ public class CustomerController {
         return customerRepository.getAllCustomers();
     }
 
+    // Returns a ResponseEntity so that in case of a SQL exception it can return both the invalid customer data
+    // and also the HttpStatus.BAD_REQUEST.
     @RequestMapping(value = "/customers/new", method = RequestMethod.POST)
     public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
         if (customerRepository.addCustomer(customer)) {
@@ -30,6 +32,8 @@ public class CustomerController {
         }
     }
 
+    // Returns a ResponseEntity so that in case of a SQL exception it can return both the invalid customer data
+    // and also the HttpStatus.BAD_REQUEST.
     @RequestMapping(value = "/customers/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Customer> updateSpecificCustomer(@PathVariable String id, @RequestBody Customer customer) {
         if (customerRepository.updateCustomer(id, customer)) {

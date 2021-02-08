@@ -1,11 +1,12 @@
 # Task 4: Fake Itunes
 ## About
-The goal of this program is to demonstrate:
+The goal of this project was to demonstrate:
 - Configuring REST endpoints with Spring.
 - Using Thymeleaf to create template html pages with templated data.
 - Publishing a Spring application to Heroku.
 - Proper endpoint naming conventions .
 - SQL queries combining JOIN, ORDERBY, GROUPBY, SUM, COUNT and MAX commands.
+- Creating and running a Docker container.
 
 The program uses a SQLite sample database called Chinook Database ([link to GitHub](https://github.com/lerocha/chinook-database)).
 
@@ -38,7 +39,7 @@ Each entry includes the full name of the customer and their total invoice value.
 - A GET request to /api/customers/id/popular/genre (with id being the actual customerId number of the specific customer) returns the specific customers most listened to genre(s).
 In most cases the response will only include one genre but in case of a tie, all the genres that have the highest listened-to-count will be displayed.
 
-## Publishing
+## Demonstration
 Finished application hosted on Heroku: [Spring Tunes](https://spring-tunes.herokuapp.com)
 
 

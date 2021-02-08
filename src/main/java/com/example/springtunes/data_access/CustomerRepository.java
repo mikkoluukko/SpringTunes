@@ -2,14 +2,19 @@ package com.example.springtunes.data_access;
 
 import com.example.springtunes.models.Country;
 import com.example.springtunes.models.Customer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// This class serves as the encapsulation of database interactions for customers API in order to
+// to keep the logic out of the CustomerController as much as possible.
 public class CustomerRepository {
     private final String URL = "jdbc:sqlite::resource:Chinook_Sqlite.sqlite";
     private Connection conn = null;
+    Logger logger = LoggerFactory.getLogger(CustomerRepository.class);
 
     private Customer createCustomer(ResultSet set) throws SQLException {
         return new Customer(
@@ -27,7 +32,7 @@ public class CustomerRepository {
         try {
             conn.close();
         } catch (Exception exception) {
-            System.out.println(exception.toString());
+            logger.error(exception.toString());
         }
     }
 
@@ -42,9 +47,9 @@ public class CustomerRepository {
             while (set.next()) {
                 customers.add(createCustomer(set));
             }
-            System.out.println("Get all went well!");
+            logger.info("Get all customers went well!");
         } catch (Exception exception) {
-            System.out.println(exception.toString());
+            logger.error(exception.toString());
         }
         finally {
             closeConnection();
@@ -70,9 +75,9 @@ public class CustomerRepository {
             int result = prep.executeUpdate();
             isSuccess = (result != 0); // if res = 1; true
 
-            System.out.println("Add went well!");
+            logger.info("Add customer went well!");
         } catch(Exception exception) {
-            System.out.println(exception.toString());
+            logger.error(exception.toString());
         }
         finally {
             closeConnection();
@@ -95,9 +100,9 @@ public class CustomerRepository {
             while (set.next()) {
                 customer = createCustomer(set);
             }
-            System.out.println("Get specific went well!");
+            logger.info("Get specific customer went well!");
         } catch (Exception exception) {
-            System.out.println(exception.toString());
+            logger.error(exception.toString());
         }
         finally {
             closeConnection();
@@ -117,9 +122,9 @@ public class CustomerRepository {
             while (set.next()) {
                 lastId = set.getString("CustomerId");
             }
-            System.out.println("Get all went well!");
+            logger.info("Get last id went well!");
         } catch (Exception exception) {
-            System.out.println(exception.toString());
+            logger.error(exception.toString());
         }
         finally {
             closeConnection();
@@ -145,9 +150,9 @@ public class CustomerRepository {
             int result = prep.executeUpdate();
             isSuccess = (result != 0); // if res = 1; true
 
-            System.out.println("Update went well!");
+            logger.info("Update customer went well!");
         } catch (Exception exception) {
-            System.out.println(exception.toString());
+            logger.error(exception.toString());
         }
         finally {
             closeConnection();
@@ -169,9 +174,9 @@ public class CustomerRepository {
                     set.getString("CustomerCount")
                 ));
             }
-            System.out.println("Get all went well!");
+            logger.info("Get customers per country went well!");
         } catch (Exception exception) {
-            System.out.println(exception.toString());
+            logger.error(exception.toString());
         }
         finally {
             closeConnection();
@@ -192,9 +197,9 @@ public class CustomerRepository {
                 customersByInvoiceTotal.add(set.getString("FirstName") + " " +
                         set.getString("LastName") + ": " + set.getString("TotalSum"));
             }
-            System.out.println("Get all went well!");
+            logger.info("Get customers by invoice total went well!");
         } catch (Exception exception) {
-            System.out.println(exception.toString());
+            logger.error(exception.toString());
         }
         finally {
             closeConnection();
@@ -223,9 +228,9 @@ public class CustomerRepository {
                 mostPopularGenre.add("Genre most listened to: " + set.getString("Name") +
                         ", times listened to: " + set.getString("GenreCount"));
             }
-            System.out.println("Get all went well!");
+            logger.info("Get most popular genre(s) went well!");
         } catch (Exception exception) {
-            System.out.println(exception.toString());
+            logger.error(exception.toString());
         }
         finally {
             closeConnection();
