@@ -40,7 +40,9 @@ Each entry includes the full name of the customer and their total invoice value.
 In most cases the response will only include one genre but in case of a tie, all the genres that have the highest listened-to-count will be displayed.
 
 ## Demonstration
-Finished application hosted on Heroku: [Spring Tunes](https://spring-tunes.herokuapp.com)
+Finished application built from the Dockerfile hosted on Heroku: [Spring Tunes](https://spring-tunes.herokuapp.com) .
+
+Docker container hosted on DockerHub: [Spring Tunes](https://hub.docker.com/repository/docker/mikkoluukko/springtunes) .
 
 Docker container hosted on DockerHub: [Spring Tunes](https://hub.docker.com/repository/docker/mikkoluukko/springtunes)
 
