@@ -36,11 +36,13 @@ Successful request returns the updated customer in the response body while unsuc
 Each entry includes the name of the country and the number of customers in that country.
 - A GET request to /api/customers/by-invoice-total returns a list of customers, ordered descending by their total invoice value.
 Each entry includes the full name of the customer and their total invoice value.
-- A GET request to /api/customers/id/popular/genre (with id being the actual customerId number of the specific customer) returns the specific customers most listened to genre(s).
+- A GET request to /api/customers/id/popular/genre (with id being the actual customerId number of the specific customer) returns the specific customers most listened-to genre(s).
 In most cases the response will only include one genre but in case of a tie, all the genres that have the highest listened-to-count will be displayed.
 
 ## Demonstration
 Finished application hosted on Heroku: [Spring Tunes](https://spring-tunes.herokuapp.com)
+
+A Postman Collection demonstrating calls to all the API endpoints is in the file `Customers API endpoints.postman_collection.json` in the root directory of the project.
 
 
 

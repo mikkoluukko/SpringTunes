@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "ecf1b492-cb1b-467c-8ec4-c3e8b72323a8",
+		"name": "Customers API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "spring-tunes.herokuapp.com/api/customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "spring-tunes.herokuapp.com/api/customers",
+					"host": [
+						"spring-tunes",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers"
+					]
+				},
+				"description": "Reads all the customers in the database and displays their: id, first name, last name, country, postal code, phone number and email."
+			},
+			"response": []
+		},
+		{
+			"name": "spring-tunes.herokuapp.com/api/customers/new",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"firstName\":\"Homer\",\"lastName\":\"Simpsons\",\"country\":\"USA\",\"postalCode\":\"98765\",\"phone\":\"+1 123 5551235\",\"email\":\"homer@gmail.com\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "spring-tunes.herokuapp.com/api/customers/new",
+					"host": [
+						"spring-tunes",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers",
+						"new"
+					]
+				},
+				"description": "Adds a new customer to the database. Successful request returns the added customer while unsuccessful request returns the data that was attempted to be added as a new customer."
+			},
+			"response": []
+		},
+		{
+			"name": "spring-tunes.herokuapp.com/api/customers/1",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"firstName\":\"Bart\",\"lastName\":\"Simpson\",\"country\":\"USA\",\"postalCode\":\"98765\",\"phone\":\"+1 123 5551235\",\"email\":\"bart@gmail.com\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "spring-tunes.herokuapp.com/api/customers/1",
+					"host": [
+						"spring-tunes",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers",
+						"1"
+					]
+				},
+				"description": "Updates an existing customer (number, in the example 1, stands for customerId). Successful request returns the updated customer while unsuccessful request returns the data that was attempted to be stored into the database in the update."
+			},
+			"response": []
+		},
+		{
+			"name": "spring-tunes.herokuapp.com/api/customers/per-country",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "spring-tunes.herokuapp.com/api/customers/by-invoice-total",
+					"host": [
+						"spring-tunes",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers",
+						"by-invoice-total"
+					]
+				},
+				"description": "Returns a list of countries, ordered descending by the number of customers per country."
+			},
+			"response": []
+		},
+		{
+			"name": "spring-tunes.herokuapp.com/api/customers/by-invoice-total",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "spring-tunes.herokuapp.com/api/customers/by-invoice-total",
+					"host": [
+						"spring-tunes",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers",
+						"by-invoice-total"
+					]
+				},
+				"description": "Returns a list of customers, ordered descending by their total invoice value."
+			},
+			"response": []
+		},
+		{
+			"name": "spring-tunes.herokuapp.com/api/customers/12/popular/genre",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "spring-tunes.herokuapp.com/api/customers/12/popular/genre",
+					"host": [
+						"spring-tunes",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"customers",
+						"12",
+						"popular",
+						"genre"
+					]
+				},
+				"description": "Returns the specific customers most listened-to genre(s) (number, in the example 12, stands for customerId). In most cases the response will only include one genre but in case of a tie, all the genres that have the highest listened-to-count will be displayed."
+			},
+			"response": []
+		}
+	]
+}
