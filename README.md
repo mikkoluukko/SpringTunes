@@ -1,4 +1,4 @@
-# Task 4: Fake Itunes
+# SpringTunes
 ## About
 The goal of this project was to demonstrate:
 - Configuring REST endpoints with Spring.
